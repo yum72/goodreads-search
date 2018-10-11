@@ -70,7 +70,7 @@ class Results extends React.Component {
         <ul>{BookComponents}</ul>
         {
           this.props.isLoading ?
-          <h3 className = "loading">Loading...</h3>:
+          <div className= 'loader'>Loading...</div>:
           <Waypoint
           onEnter={this._handleWaypointEnter}
           onLeave={this._handleWaypointLeave}
