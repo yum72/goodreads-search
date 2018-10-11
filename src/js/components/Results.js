@@ -1,23 +1,19 @@
 import React from "react";
-import bookSearch from '../bookAction'
-import BookStore from '../stores/BookStore'
+import * as Actions from '../bookAction'
 import { Link } from 'react-router-dom';
 import '../../css/SearchBox.css'
 import Waypoint from 'react-waypoint';
+import { connect} from "react-redux"
+import { bindActionCreators } from "redux";
 
 
 
-export default class Results extends React.Component {
+class Results extends React.Component {
 
   constructor() {
     super();
-    this.getBooks = this.getBooks.bind(this)
     this.state = {
-      books: [{
-        id: 123475463244,
-        book: "",
-        author: 'Searching'
-      }],
+      booksAvailable: true,
       results: '',
       page: 1
     };
@@ -26,75 +22,43 @@ export default class Results extends React.Component {
 
   componentWillMount() {
     const query = this.props.match.params.search
-    bookSearch(query, this.state.page)
-    BookStore.on("change", this.getBooks);
+    this.props.bookSearch(query, this.state.page)
   }
 
-  componentWillUnmount() {
-    BookStore.removeListener("change", this.getBooks);
-  }
-
-  getBooks = () => {
-    this.setState({
-      books: BookStore.getAll(),
-      results: BookStore.getResults()
-    });
-  }
-
-  getMoreBooks = () => {
-    const { books } = this.state;
-    const addBooks = books.concat(BookStore.getAll())
-    this.setState({
-      books: addBooks
-    });
-  }
 
   _handleWaypointEnter = () =>{
     console.log('handleWaypointEnter')
     console.log(this.state.page)
 
     const query = this.props.match.params.search
-    bookSearch(query, this.state.page + 1)
+    this.props.bookSearch(query, this.state.page + 1)
 
     this.setState({
       page: this.state.page + 1
     })
 
+    this.props.fetchingBooks()
+
   }
   
-
-  handleClick = (e) => {
-
-    // console.log(this.state.page)
-
-    // const query = this.props.match.params.search
-    // bookSearch(query, this.state.page + 1)
-
-    // this.setState({
-    //   page: this.state.page + 1
-    // })
-
-    // //this.getMoreBooks()
-
-  }
 
   render() {
 
 
-    const { books } = this.state;
+    const  books = this.props.books;
 
     let BookComponents = books.map((book) => {
       return (
         <li className="singleResult" key={book.id}>
           <Link to={`/books/${book.id}`}>
             <span className="bookName">{book.book}</span>
-            <span className="authorName">{book.author}</span>
           </Link>
+          <span className="authorName">{book.author}</span>
         </li>
       )
     });
 
-    if (!books.length) {
+    if (!books.length && !this.state.booksAvailable) {
       BookComponents = <li className="singleResult" key='123457'>
         <span className="authorName">No results Found</span>
       </li>
@@ -105,7 +69,7 @@ export default class Results extends React.Component {
         <Link to='/'>Home</Link>
         <ul>{BookComponents}</ul>
         {
-          BookStore.getLoading() ?
+          this.props.isLoading ?
           <h3 className = "loading">Loading...</h3>:
           <Waypoint
           onEnter={this._handleWaypointEnter}
@@ -118,3 +82,17 @@ export default class Results extends React.Component {
   }
 }
 
+const mapStateToProps = store => ({
+  books: store.books.books,
+  results: store.books.results,
+  isLoading:  store.books.isLoading
+})
+
+const mapDispatchToProps = dispatch => ({
+  bookSearch: bindActionCreators(Actions.bookSearch, dispatch),
+  fetchingBooks: bindActionCreators(Actions.fetchingBooks, dispatch),
+})
+
+Results = connect(mapStateToProps, mapDispatchToProps)(Results)
+
+export default Results

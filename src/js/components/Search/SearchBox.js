@@ -1,10 +1,11 @@
 import React from "react";
-import bookSearch from '../../bookAction'
-import BookStore from '../../stores/BookStore'
+import { connect} from "react-redux"
+import { bindActionCreators } from "redux";
 import { Redirect, Link } from 'react-router-dom';
 import '../../../css/SearchBox.css'
 import { withRouter } from "react-router";
 
+import * as Actions from '../../bookAction'
 
 
 const WAIT_INTERVAL = 1000
@@ -16,14 +17,9 @@ class SearchBox extends React.Component {
 
   constructor() {
     super();
-    this.getBooks = this.getBooks.bind(this)
     this.state = {
-      books: [],
-      results: BookStore.getResults(),
-      redirect: false,
-      query: '',
       suggestionsDisplay: true
-    };
+     };
   }
 
   handleClick = () => {
@@ -42,7 +38,7 @@ class SearchBox extends React.Component {
       query
     })
     typingTimer = setTimeout(async () => {
-      await bookSearch(query, 1)
+      await this.props.bookSearch(query, 1)
     }, WAIT_INTERVAL);
 
   }
@@ -71,20 +67,10 @@ class SearchBox extends React.Component {
 
   componentWillMount() {
     document.addEventListener('mousedown', this.handleClickList, false)
-    BookStore.on("change", this.getBooks);
-
   }
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickList, false)
-    BookStore.removeListener("change", this.getBooks);
-  }
-
-  getBooks() {
-    this.setState({
-      books: BookStore.getFiveBooks(),
-      results: BookStore.getResults()
-    });
   }
 
   render() {
@@ -94,12 +80,20 @@ class SearchBox extends React.Component {
       //return <Redirect push to={`/results/${this.state.query}`} />; 
     }
 
-    const { books } = this.state;
+    let books = this.props.books;
+
+    if (books.length > 5) {
+      books = books.slice(0, 5)
+    }
+    else {
+      books= books
+    } 
+    
     const { suggestionsDisplay } = this.state
     let BookComponents
-
-    if (suggestionsDisplay) {
+    if (suggestionsDisplay && books) {
       BookComponents = books.map((book) => {
+        
         return (
           <li className="singleResult" key={book.id}>
             <Link to={`/books/${book.id}`}>
@@ -110,7 +104,7 @@ class SearchBox extends React.Component {
         )
       });
 
-      const { results } = this.state;
+      const { results } = this.props;
 
       if (results && books.length) {
         BookComponents.push(
@@ -131,5 +125,16 @@ class SearchBox extends React.Component {
     );
   }
 }
+
+const mapStateToProps = store => ({
+  books: store.books.books,
+  results: store.books.results
+})
+
+const mapDispatchToProps = dispatch => ({
+  bookSearch: bindActionCreators(Actions.bookSearch, dispatch),
+})
+
+SearchBox = connect(mapStateToProps, mapDispatchToProps)(SearchBox)
 
 export default withRouter(SearchBox)

@@ -1,14 +1,14 @@
 import React from "react";
-import BookStore from '../stores/BookStore'
-import {getSingleBookDetails} from '../bookAction'
+import * as Actions from '../bookAction'
 import { Link } from 'react-router-dom';
+import { connect} from "react-redux"
+import { bindActionCreators } from "redux";
 import '../../css/singlePage.css'
 
-export default class SingleBook extends React.Component {
+class SingleBook extends React.Component {
 
     constructor() {
         super();
-        this.getBooks = this.getBooks.bind(this)
         this.state = {
             book: [],
             query: ''
@@ -16,48 +16,34 @@ export default class SingleBook extends React.Component {
     }
 
 
-    async componentWillMount() {
+    componentWillMount() {
         const id = this.props.match.params.id
-        await getSingleBookDetails(id)
-        BookStore.on("change", this.getBooks);
+        this.props.getSingleBookDetails(id)
+        //BookStore.on("change", this.getBooks);
         //console.log(book)
     }
 
 
     componentWillUnmount() {
-        BookStore.removeListener("change", this.getBooks);
-    }
-
-    getBooks() {
-        let book = BookStore.getSingleBook()
-        this.setState({
-            book: book
-        });
-        if(book.name == undefined){
-            this.setState({
-                book: {
-                    name: 'Not Found'
-                }
-            });     
-        }
+        //BookStore.removeListener("change", this.getBooks);
     }
 
     render() {
 
-        const { book } = this.state;
+        const { singleBook } = this.props;
 
         return (
             <div className="completeResults">
                 <Link to='/'>Home</Link>
                 <div className = "wrapper">
                     <div>
-                        <img src={book.imageURL}/>
+                        <img src={singleBook.imageURL}/>
                     </div>
                     <div className = "textBox">
-                        <p>Book Name : {book.name}</p>
-                        <p>Author :{book.author}</p>
-                        <p>Average Rating :{book.avg_rating}</p>
-                        <p>Total Rating :{book.total_rating}</p>
+                        <p>Book Name : {singleBook.name}</p>
+                        <p>Author :{singleBook.author}</p>
+                        <p>Average Rating :{singleBook.avg_rating}</p>
+                        <p>Total Rating :{singleBook.total_rating}</p>
                     </div>
                 </div>
             </div>
@@ -65,3 +51,15 @@ export default class SingleBook extends React.Component {
     }
 }
 
+
+const mapStateToProps = store => ({
+    singleBook:  store.books.singleBook
+  })
+  
+  const mapDispatchToProps = dispatch => ({
+    getSingleBookDetails: bindActionCreators(Actions.getSingleBookDetails, dispatch)
+  })
+  
+  SingleBook = connect(mapStateToProps, mapDispatchToProps)(SingleBook)
+  
+  export default SingleBook
