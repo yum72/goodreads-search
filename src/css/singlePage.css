@@ -1,0 +1,15 @@
+
+img {
+    padding: 25px;
+    width: 150px;
+    height: 200px;
+}
+
+.wrapper {
+    display: flex;
+}
+
+.textBox {
+    padding: 25px;
+    margin-left: 20px;
+}
