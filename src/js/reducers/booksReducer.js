@@ -2,7 +2,8 @@ export default function reducer(state = {
     books : [],
     isLoading : false,
     results : '',
-    singleBook : {}
+    singleBook : {},
+    booksAvailable: true
 }, action) {
 
     switch (action.type) {
@@ -16,7 +17,7 @@ export default function reducer(state = {
             return {
                 ...state, 
                 books: action.payload.books,
-                results: action.payload.results,
+                //results: action.payload.results,
                 isLoading: false
             }
         }
@@ -29,7 +30,7 @@ export default function reducer(state = {
         case "RECEIVE_RESULTS": {
             return {
                 ...state, 
-                results: action.results,
+                results: action.payload.results,
                 isLoading: false
             }
         }
@@ -39,12 +40,18 @@ export default function reducer(state = {
                 singleBook: action.payload.book
             }
         }
+        case "NO_MORE_RESULTS": {
+            return {
+                ...state, 
+                booksAvailable: false
+            }
+        }
         case "ADD_BOOKS": {
             let addedBooks = state.books.concat(action.payload.books)
             return {
                 ...state, 
                 books: addedBooks,
-                results: action.payload.results,
+                //results: action.payload.results,
                 isLoading: false
             }
         }

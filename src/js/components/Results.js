@@ -13,7 +13,6 @@ class Results extends React.Component {
   constructor() {
     super();
     this.state = {
-      booksAvailable: true,
       results: '',
       page: 1
     };
@@ -23,6 +22,7 @@ class Results extends React.Component {
   componentWillMount() {
     const query = this.props.match.params.search
     this.props.bookSearch(query, this.state.page)
+    this._handleWaypointEnter()
   }
 
 
@@ -37,7 +37,9 @@ class Results extends React.Component {
       page: this.state.page + 1
     })
 
-    this.props.fetchingBooks()
+    if(this.props.booksAvailable){
+      this.props.fetchingBooks()
+    }
 
   }
   
@@ -58,10 +60,10 @@ class Results extends React.Component {
       )
     });
 
-    if (!books.length && !this.state.booksAvailable) {
-      BookComponents = <li className="singleResult" key='123457'>
-        <span className="authorName">No results Found</span>
-      </li>
+    if (!this.props.booksAvailable) {
+      BookComponents.push(<li className="singleResult" key='123457'>
+      <span className="authorName">No More Results</span>
+    </li>)
     }
 
     return (
@@ -85,7 +87,8 @@ class Results extends React.Component {
 const mapStateToProps = store => ({
   books: store.books.books,
   results: store.books.results,
-  isLoading:  store.books.isLoading
+  isLoading:  store.books.isLoading,
+  booksAvailable: store.books.booksAvailable
 })
 
 const mapDispatchToProps = dispatch => ({

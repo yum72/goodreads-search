@@ -8,7 +8,7 @@ import { withRouter } from "react-router";
 import * as Actions from '../../bookAction'
 
 
-const WAIT_INTERVAL = 1000
+const WAIT_INTERVAL = 700
 let typingTimer = ''
 
 
@@ -18,12 +18,18 @@ class SearchBox extends React.Component {
   constructor() {
     super();
     this.state = {
-      suggestionsDisplay: true
+      suggestionsDisplay: true,
+      query : ''
      };
   }
 
   handleClick = () => {
-    this.setState({ redirect: true });
+    if(this.state.query !== ''){
+      this.setState({ redirect: true });
+    }
+    else{
+      alert('Empty Search')
+    }
   }
 
   handleChange = (e) => {
@@ -35,7 +41,7 @@ class SearchBox extends React.Component {
     clearTimeout(typingTimer);
     const query = e.target.value
     this.setState({
-      query
+      query : query
     })
     typingTimer = setTimeout(async () => {
       await this.props.bookSearch(query, 1)
@@ -91,7 +97,7 @@ class SearchBox extends React.Component {
     
     const { suggestionsDisplay } = this.state
     let BookComponents
-    if (suggestionsDisplay && books) {
+    if (suggestionsDisplay && books && this.state.query !== '') {
       BookComponents = books.map((book) => {
         
         return (

@@ -22,31 +22,23 @@ export function bookSearch(query, page) {
                 // imageURL: book.best_book[0].image_url[0]
               }
             })
-            if (page == 1) {
+            if (page === 1) {
               let results = convertedResult.GoodreadsResponse.search[0]['total-results'][0]
-              dispatch({
-                type: "RECEIVE_BOOKS", payload: {
-                  books: formatedData,
-                  results: results
-                }
-              })
+              dispatch(updateBooks(formatedData))
+              dispatch(updateTotalResults(results))
               //updateBooks(formatedData)
               //updateTotalResults(results)
             }
             else {
               //addBooks(formatedData)
+              dispatch(addBooks(formatedData))
               let results = convertedResult.GoodreadsResponse.search[0]['total-results'][0]
               //updateTotalResults(results)
-              dispatch({
-                type: "ADD_BOOKS", payload: {
-                  books: formatedData,
-                  results: results
-                }
-              })
+              dispatch(updateTotalResults(results))
 
             }
           }
-          else if (page == 1) {
+          else if (page === 1) {
             //updateBooks([])
             dispatch({
               type: "RECEIVE_BOOKS", payload: {
@@ -57,6 +49,10 @@ export function bookSearch(query, page) {
           }
           else {
             //no more results 
+            console.log('no more results ')
+            dispatch({
+              type: "NO_MORE_RESULTS"
+            })
           }
 
 
@@ -129,8 +125,7 @@ export function fetchingBooks() {
 
 export function updateBooks(books) {
   return {
-    type: "RECEIVE_BOOKS",
-    payload: {
+    type: "RECEIVE_BOOKS", payload: {
       books: books
     }
   }
