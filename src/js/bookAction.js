@@ -5,7 +5,7 @@ const parseString = require('xml2js').parseString;
 export function bookSearch(query, page) {
 
   return (dispatch) => {
-    fetchingBooks()
+    dispatch(fetchingBooks())
     axios.get('https://www.goodreads.com/search/index.xml?key=rgMebNe9PaPTpob7TImEw&q=' + query + '&page=' + page, { crossdomain: true })
       .then(function (response) {
         parseString(response.data, { trim: true }, function (err, convertedResult) {
@@ -47,6 +47,10 @@ export function bookSearch(query, page) {
       })
       .catch(function (error) {
         console.log(error);
+        console.log('no more results ')
+        dispatch({
+          type: "NO_MORE_RESULTS"
+        })
       })
   }
 

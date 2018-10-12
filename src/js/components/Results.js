@@ -5,6 +5,7 @@ import '../../css/SearchBox.css'
 import Waypoint from 'react-waypoint';
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux";
+const R = require('ramda');
 
 
 
@@ -13,7 +14,6 @@ class Results extends React.Component {
   constructor() {
     super();
     this.state = {
-      results: '',
       page: 1
     };
   }
@@ -27,9 +27,7 @@ class Results extends React.Component {
 
 
   _handleWaypointEnter = () => {
-    console.log('handleWaypointEnter')
-    console.log(this.state.page)
-
+    if (this.props.booksAvailable) {
     const query = this.props.match.params.search
     this.props.bookSearch(query, this.state.page + 1)
 
@@ -37,28 +35,16 @@ class Results extends React.Component {
       page: this.state.page + 1
     })
 
-    if (this.props.booksAvailable) {
       this.props.fetchingBooks()
     }
-
   }
 
 
   render() {
 
-
     const books = this.props.books;
 
-    let BookComponents = books.map((book) => {
-      return (
-        <li className="singleResult" key={book.id}>
-          <Link to={`/books/${book.id}`}>
-            <span className="bookName">{book.book}</span>
-          </Link>
-          <span className="authorName">{book.author}</span>
-        </li>
-      )
-    });
+    let BookComponents = R.map(bookLiMarkup, books)
 
     if (!this.props.booksAvailable) {
       BookComponents.push(<li className="singleResult" key='123457'>
@@ -81,6 +67,17 @@ class Results extends React.Component {
       </div>
     );
   }
+}
+
+const bookLiMarkup = (book) => {
+  return (
+    <li className="singleResult" key={book.id}>
+      <Link to={`/books/${book.id}`}>
+        <span className="bookName">{book.book}</span>
+      </Link>
+      <span className="authorName">{book.author}</span>
+    </li>
+  )
 }
 
 const mapStateToProps = store => ({

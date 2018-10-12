@@ -7,25 +7,9 @@ import '../../css/singlePage.css'
 
 class SingleBook extends React.Component {
 
-    constructor() {
-        super();
-        this.state = {
-            book: [],
-            query: ''
-        };
-    }
-
-
     componentWillMount() {
         const id = this.props.match.params.id
         this.props.getSingleBookDetails(id)
-        //BookStore.on("change", this.getBooks);
-        //console.log(book)
-    }
-
-
-    componentWillUnmount() {
-        //BookStore.removeListener("change", this.getBooks);
     }
 
     render() {
