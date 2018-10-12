@@ -43,7 +43,8 @@ export default function reducer(state = {
         case "NO_MORE_RESULTS": {
             return {
                 ...state,
-                booksAvailable: false
+                booksAvailable: false,
+                isLoading: false
             }
         }
         case "ADD_BOOKS": {

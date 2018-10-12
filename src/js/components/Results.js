@@ -78,7 +78,6 @@ class Results extends React.Component {
               onLeave={this._handleWaypointLeave}
             />
         }
-
       </div>
     );
   }

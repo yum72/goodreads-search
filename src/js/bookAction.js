@@ -67,6 +67,7 @@ export function bookSearch(query, page) {
 
 export function getSingleBookDetails(id) {
   return (dispatch) => {
+    dispatch(addSingleBook({}))
     axios.get('https://www.goodreads.com/book/show.xml?key=rgMebNe9PaPTpob7TImEw&id=' + id, { crossdomain: true })
       .then(async function (response) {
 
