@@ -1,5 +1,6 @@
 import axios from 'axios'
-var parseString = require('xml2js').parseString;
+const R = require('ramda');
+const parseString = require('xml2js').parseString;
 
 export function bookSearch(query, page) {
 
@@ -12,38 +13,25 @@ export function bookSearch(query, page) {
 
           let booksData = convertedResult.GoodreadsResponse.search[0].results[0].work
           if (booksData) {
-            let formatedData = booksData.map(book => {
-              return {
-                id: book.best_book[0].id[0]._,
-                book: book.best_book[0].title[0],
-                author: book.best_book[0].author[0].name[0],
-                // average_rating: book.average_rating[0],
-                // totalReviews: book.ratings_count[0]._,
-                // imageURL: book.best_book[0].image_url[0]
-              }
-            })
+
+            let formatedData = R.map(extractBook, booksData)
+
             if (page === 1) {
               let results = convertedResult.GoodreadsResponse.search[0]['total-results'][0]
               dispatch(updateBooks(formatedData))
               dispatch(updateTotalResults(results))
-              //updateBooks(formatedData)
-              //updateTotalResults(results)
             }
             else {
-              //addBooks(formatedData)
               dispatch(addBooks(formatedData))
               let results = convertedResult.GoodreadsResponse.search[0]['total-results'][0]
-              //updateTotalResults(results)
               dispatch(updateTotalResults(results))
 
             }
           }
           else if (page === 1) {
-            //updateBooks([])
             dispatch({
               type: "RECEIVE_BOOKS", payload: {
-                books: [],
-                results: ''
+                books: []
               }
             })
           }
@@ -54,7 +42,6 @@ export function bookSearch(query, page) {
               type: "NO_MORE_RESULTS"
             })
           }
-
 
         });
       })
@@ -73,7 +60,6 @@ export function getSingleBookDetails(id) {
 
         await parseString(response.data, { trim: true }, function (err, convertedResult) {
           if (err) throw err
-          //console.log(convertedResult)
           let details = convertedResult.GoodreadsResponse
           let bookDetails = {
             name: details.book[0].title[0],
@@ -97,6 +83,17 @@ export function getSingleBookDetails(id) {
           // imageURL:  'Not Found',
         }))
       })
+  }
+}
+
+const extractBook = (bookObj) => {
+  return {
+    id: bookObj.best_book[0].id[0]._,
+    book: bookObj.best_book[0].title[0],
+    author: bookObj.best_book[0].author[0].name[0],
+    // average_rating: book.average_rating[0],
+    // totalReviews: book.ratings_count[0]._,
+    // imageURL: book.best_book[0].image_url[0]
   }
 }
 
