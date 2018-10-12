@@ -3,7 +3,7 @@ import * as Actions from '../bookAction'
 import { Link } from 'react-router-dom';
 import '../../css/SearchBox.css'
 import Waypoint from 'react-waypoint';
-import { connect} from "react-redux"
+import { connect } from "react-redux"
 import { bindActionCreators } from "redux";
 
 
@@ -26,7 +26,7 @@ class Results extends React.Component {
   }
 
 
-  _handleWaypointEnter = () =>{
+  _handleWaypointEnter = () => {
     console.log('handleWaypointEnter')
     console.log(this.state.page)
 
@@ -37,17 +37,17 @@ class Results extends React.Component {
       page: this.state.page + 1
     })
 
-    if(this.props.booksAvailable){
+    if (this.props.booksAvailable) {
       this.props.fetchingBooks()
     }
 
   }
-  
+
 
   render() {
 
 
-    const  books = this.props.books;
+    const books = this.props.books;
 
     let BookComponents = books.map((book) => {
       return (
@@ -62,8 +62,8 @@ class Results extends React.Component {
 
     if (!this.props.booksAvailable) {
       BookComponents.push(<li className="singleResult" key='123457'>
-      <span className="authorName">No More Results</span>
-    </li>)
+        <span className="authorName">No More Results</span>
+      </li>)
     }
 
     return (
@@ -72,13 +72,13 @@ class Results extends React.Component {
         <ul>{BookComponents}</ul>
         {
           this.props.isLoading ?
-          <div className= 'loader'>Loading...</div>:
-          <Waypoint
-          onEnter={this._handleWaypointEnter}
-          onLeave={this._handleWaypointLeave}
-        />
+            <div className='loader'>Loading...</div> :
+            <Waypoint
+              onEnter={this._handleWaypointEnter}
+              onLeave={this._handleWaypointLeave}
+            />
         }
-        
+
       </div>
     );
   }
@@ -87,7 +87,7 @@ class Results extends React.Component {
 const mapStateToProps = store => ({
   books: store.books.books,
   results: store.books.results,
-  isLoading:  store.books.isLoading,
+  isLoading: store.books.isLoading,
   booksAvailable: store.books.booksAvailable
 })
 

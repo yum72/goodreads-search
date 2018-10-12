@@ -1,21 +1,21 @@
 export default function reducer(state = {
-    books : [],
-    isLoading : false,
-    results : '',
-    singleBook : {},
+    books: [],
+    isLoading: false,
+    results: '',
+    singleBook: {},
     booksAvailable: true
 }, action) {
 
     switch (action.type) {
         case "GET_ALL": {
             return {
-                ...state, 
+                ...state,
                 books: [...state.books]
-            }  
+            }
         }
         case "RECEIVE_BOOKS": {
             return {
-                ...state, 
+                ...state,
                 books: action.payload.books,
                 //results: action.payload.results,
                 isLoading: false
@@ -23,33 +23,33 @@ export default function reducer(state = {
         }
         case "BOOKS_FETCHING": {
             return {
-                ...state, 
+                ...state,
                 isLoading: true
             }
         }
         case "RECEIVE_RESULTS": {
             return {
-                ...state, 
+                ...state,
                 results: action.payload.results,
                 isLoading: false
             }
         }
         case "SINGLE_BOOK": {
             return {
-                ...state, 
+                ...state,
                 singleBook: action.payload.book
             }
         }
         case "NO_MORE_RESULTS": {
             return {
-                ...state, 
+                ...state,
                 booksAvailable: false
             }
         }
         case "ADD_BOOKS": {
             let addedBooks = state.books.concat(action.payload.books)
             return {
-                ...state, 
+                ...state,
                 books: addedBooks,
                 //results: action.payload.results,
                 isLoading: false

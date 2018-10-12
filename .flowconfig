@@ -1,0 +1,15 @@
+[ignore]
+.*/node_modules/.*
+.*/src/serviceWorker\.js
+.*/src/index\.js
+.*/src/App\.test\.js
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]

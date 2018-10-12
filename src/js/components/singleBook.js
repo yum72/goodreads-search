@@ -1,7 +1,7 @@
 import React from "react";
 import * as Actions from '../bookAction'
 import { Link } from 'react-router-dom';
-import { connect} from "react-redux"
+import { connect } from "react-redux"
 import { bindActionCreators } from "redux";
 import '../../css/singlePage.css'
 
@@ -35,11 +35,11 @@ class SingleBook extends React.Component {
         return (
             <div className="completeResults">
                 <Link to='/'>Home</Link>
-                <div className = "wrapper">
+                <div className="wrapper">
                     <div>
-                        <img src={singleBook.imageURL}/>
+                        <img src={singleBook.imageURL} />
                     </div>
-                    <div className = "textBox">
+                    <div className="textBox">
                         <p>Book Name : {singleBook.name}</p>
                         <p>Author :{singleBook.author}</p>
                         <p>Average Rating :{singleBook.avg_rating}</p>
@@ -53,13 +53,13 @@ class SingleBook extends React.Component {
 
 
 const mapStateToProps = store => ({
-    singleBook:  store.books.singleBook
-  })
-  
-  const mapDispatchToProps = dispatch => ({
+    singleBook: store.books.singleBook
+})
+
+const mapDispatchToProps = dispatch => ({
     getSingleBookDetails: bindActionCreators(Actions.getSingleBookDetails, dispatch)
-  })
-  
-  SingleBook = connect(mapStateToProps, mapDispatchToProps)(SingleBook)
-  
-  export default SingleBook
+})
+
+SingleBook = connect(mapStateToProps, mapDispatchToProps)(SingleBook)
+
+export default SingleBook
