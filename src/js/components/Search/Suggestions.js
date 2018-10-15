@@ -1,12 +1,20 @@
+//@flow
 import React from "react";
 import { Link } from 'react-router-dom';
 
-export default class Suggestions extends React.Component {
+type Props = {
+    suggestionsDisplay: bool,
+    books: Array<Object>,
+    query: string,
+    results: number
+}
+
+export default class Suggestions extends React.Component <Props> {
     render() {
 
         const { suggestionsDisplay } = this.props
         let books = this.props.books
-        let BookComponents
+        let BookComponents: Array<Object>
         if (suggestionsDisplay && books && this.props.query !== '') {
             BookComponents = books.map((book) => {
                 return (

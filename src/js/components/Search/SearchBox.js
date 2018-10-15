@@ -1,3 +1,4 @@
+//@flow
 import React from "react";
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux";
@@ -7,19 +8,29 @@ import Suggestions from "./Suggestions"
 import * as Actions from '../../bookAction'
 
 
-const WAIT_INTERVAL = 700
-let typingTimer = ''
+type Props = {
+  books: Array<Object>,
+  results: number,
+  bookSearch: Function,
+  history: Object
+}
+
+type State = {
+  suggestionsDisplay: bool,
+  query: string,
+  redirect?: bool
+}
+
+const WAIT_INTERVAL:number = 700
+let typingTimer:any
 
 
-
-class SearchBox extends React.Component {
-
-  constructor() {
-    super();
-    this.state = {
-      suggestionsDisplay: true,
-      query: ''
-    };
+class SearchBox extends React.Component<Props,State> {
+  
+  state = {
+    suggestionsDisplay: true,
+    query: '',
+    redirect: false
   }
 
   handleClick = () => {
@@ -31,8 +42,7 @@ class SearchBox extends React.Component {
     }
   }
 
-  handleChange = (e) => {
-
+  handleChange = (e:Object) => {
     this.setState({
       suggestionsDisplay: true
     })
@@ -42,13 +52,14 @@ class SearchBox extends React.Component {
     this.setState({
       query: query
     })
+
     typingTimer = setTimeout(async () => {
       await this.props.bookSearch(query, 1)
     }, WAIT_INTERVAL);
 
   }
 
-  handleClickList = (e) => {
+  handleClickList = (e:Object) => {
     if (this.node.contains(e.target)) {
       //click inside list
       return
@@ -58,7 +69,7 @@ class SearchBox extends React.Component {
     this.handleClickOutside()
   }
 
-  handleClickOutside = (e) => {
+  handleClickOutside = () => {
     this.setState({
       suggestionsDisplay: false
     })
@@ -78,6 +89,9 @@ class SearchBox extends React.Component {
     document.removeEventListener('mousedown', this.handleClickList, false)
   }
 
+
+  node: any
+
   render() {
 
     if (this.state.redirect) {
@@ -93,7 +107,7 @@ class SearchBox extends React.Component {
     return (
       <div className="searchBar">
         <input type="text" onChange={this.handleChange} onClick={this.handleInputClick} className="searchInput" />
-        <button className="searchButton" onClick={(e) => { this.handleClick(e) }}>Search</button>
+        <button className="searchButton" onClick={this.handleClick}>Search</button>
         <div ref={node => this.node = node}>
           <Suggestions books={books} results={this.props.results} query={this.state.query} suggestionsDisplay={this.state.suggestionsDisplay} />
         </div>
@@ -103,8 +117,8 @@ class SearchBox extends React.Component {
 }
 
 const mapStateToProps = store => ({
-  books: store.books.books,
-  results: store.books.results
+  books: store.bookReducer.books,
+  results: store.bookReducer.results
 })
 
 const mapDispatchToProps = dispatch => ({

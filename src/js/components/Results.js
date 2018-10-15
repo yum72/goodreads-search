@@ -1,3 +1,4 @@
+//@flow
 import React from "react";
 import * as Actions from '../bookAction'
 import { Link } from 'react-router-dom';
@@ -5,11 +6,24 @@ import '../../css/SearchBox.css'
 import Waypoint from 'react-waypoint';
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux";
+import { type } from "os";
 const R = require('ramda');
 
+type State = {
+  page: number
+}
 
+type Props = {
+  bookSearch: Function,
+  fetchingBooks: Function,
+  books: Array<Object>,
+  results: number,
+  isLoading: bool,
+  booksAvailable: bool,
+  match: Object
+}
 
-class Results extends React.Component {
+class Results extends React.Component <Props, State> {
 
   constructor() {
     super();
@@ -61,7 +75,6 @@ class Results extends React.Component {
             <div className='loader'>Loading...</div> :
             <Waypoint
               onEnter={this._handleWaypointEnter}
-              onLeave={this._handleWaypointLeave}
             />
         }
       </div>
@@ -81,10 +94,10 @@ const bookLiMarkup = (book) => {
 }
 
 const mapStateToProps = store => ({
-  books: store.books.books,
-  results: store.books.results,
-  isLoading: store.books.isLoading,
-  booksAvailable: store.books.booksAvailable
+  books: store.bookReducer.books,
+  results: store.bookReducer.results,
+  isLoading: store.bookReducer.isLoading,
+  booksAvailable: store.bookReducer.booksAvailable
 })
 
 const mapDispatchToProps = dispatch => ({

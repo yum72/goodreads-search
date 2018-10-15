@@ -1,3 +1,4 @@
+//@flow
 import React from "react";
 import * as Actions from '../bookAction'
 import { Link } from 'react-router-dom';
@@ -5,7 +6,13 @@ import { connect } from "react-redux"
 import { bindActionCreators } from "redux";
 import '../../css/singlePage.css'
 
-class SingleBook extends React.Component {
+type Props = {
+    singleBook: Object,
+    match: Object,
+    getSingleBookDetails: Function
+} 
+
+class SingleBook extends React.Component<Props> {
 
     componentWillMount() {
         const id = this.props.match.params.id
@@ -37,7 +44,7 @@ class SingleBook extends React.Component {
 
 
 const mapStateToProps = store => ({
-    singleBook: store.books.singleBook
+    singleBook: store.bookReducer.singleBook
 })
 
 const mapDispatchToProps = dispatch => ({

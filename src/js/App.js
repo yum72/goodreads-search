@@ -1,4 +1,4 @@
-
+//@flow
 import React, { Component } from 'react';
 import Search from './pages/Search'
 import Results from './components/Results'
@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/BookStore'
 
-class App extends Component{
+class App extends Component<{}>{
   render() {
     return (
       <Provider store={store}>
