@@ -1,10 +1,12 @@
-export default function reducer(state = {
+const initialState = {
     books: [],
     isLoading: false,
     results: '',
     singleBook: {},
     booksAvailable: true
-}, action) {
+}
+
+export default function reducer(state = initialState, action) {
 
     switch (action.type) {
         case "GET_ALL": {
@@ -56,12 +58,9 @@ export default function reducer(state = {
                 isLoading: false
             }
         }
-        // default : {
-        //     this.results = action.results;
-        //     this.books = action.books;
-        // 
-        // }
-
+        default: {
+            return state
+        }
     }
 
     return state
