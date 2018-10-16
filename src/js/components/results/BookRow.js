@@ -1,7 +1,8 @@
+//@flow
 import React from "react";
 import { Link } from 'react-router-dom';
 
-export const BookRow = (book) => {
+export const BookRow = (book:Object) => {
     return (
         <li className="singleResult" key={book.id}>
             <Link to={`/books/${book.id}`}>
