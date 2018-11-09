@@ -58,10 +58,10 @@ export default function reducer(state = initialState, action) {
                 isLoading: false
             }
         }
-        // default: {
-        //     return state
-        // }
+        default: {
+            return state
+        }
     }
 
-    return state
+    //return state
 }

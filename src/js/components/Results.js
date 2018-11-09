@@ -89,11 +89,11 @@ const mapStateToProps = store => ({
   booksAvailable: store.bookReducer.booksAvailable
 })
 
-const mapDispatchToProps = dispatch => ({
-  bookSearch: bindActionCreators(Actions.bookSearch, dispatch),
-  fetchingBooks: bindActionCreators(Actions.fetchingBooks, dispatch),
-})
+// const mapDispatchToProps = dispatch => ({
+//   bookSearch: bindActionCreators(Actions.bookSearch, dispatch),
+//   fetchingBooks: bindActionCreators(Actions.fetchingBooks, dispatch),
+// })
 
-Results = connect(mapStateToProps, mapDispatchToProps)(Results)
+Results = connect(mapStateToProps, {bookSearch:Actions.bookSearch,fetchingBooks:Actions.fetchingBooks})(Results)
 
 export default Results

@@ -9,7 +9,7 @@ type Props = {
     results: number
 }
 
-export default class Suggestions extends React.Component <Props> {
+export default class Suggestions extends React.Component<Props> {
     render() {
 
         const { suggestionsDisplay } = this.props
