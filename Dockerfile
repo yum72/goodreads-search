@@ -4,7 +4,7 @@ FROM node:carbon
 RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get -y install autoconf automake libtool nasm make pkg-config git apt-utils 
-RUN sudo libltdl-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y libltdl7 && rm -rf /var/lib/apt/lists/*
 
 # Create app directory
 RUN mkdir -p /usr/src/app
