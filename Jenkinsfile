@@ -13,10 +13,10 @@ node {
      sh 'docker build -t react-test -f Dockerfile.test --no-cache .'
     }
     stage('Docker test'){
-      sh 'docker run -it --rm react-test -v /var/run/docker.sock:/var/run/docker.sock'
+      sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock react-test'
     }
     stage('Clean Docker test'){
-      sh 'docker rmi -it  react-test'
+      sh 'docker rmi react-test'
     }
     stage('Deploy'){
       if(env.BRANCH_NAME == 'master'){
