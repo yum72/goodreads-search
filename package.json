@@ -20,12 +20,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "flow": "flow"
   },
   "devDependencies": {
-    "flow-bin": "*"
+    "flow-bin": "*",
+    "jest": "^23.6.0"
   },
   "eslintConfig": {
     "extends": "react-app"
